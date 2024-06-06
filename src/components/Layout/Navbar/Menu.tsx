@@ -5,11 +5,8 @@ export const Menu = () => {
   const { toggleTheme } = useTheme();
   return (
     <>
-      <Navbar.Toggle
-        aria-controls={`offcanvasNavbar-expand-lg`}
-        className="border-0"
-      />
       <Navbar.Offcanvas
+        className="flex-grow-0"
         id={`offcanvasNavbar-expand-lg`}
         aria-labelledby={`offcanvasNavbarLabel-expand-lg`}
         placement="end"
