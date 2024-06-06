@@ -9,8 +9,11 @@ body {
   transition:
     background-color 0.3s ease,
     color 0.3s ease;
+  position: relative;
 }
-
+.pointer {
+  cursor: pointer;
+}
 [data-bs-theme='dark'],
 [data-bs-theme='light'] {
   .offcanvas,
