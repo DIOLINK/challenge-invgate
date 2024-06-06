@@ -30,3 +30,13 @@ export const getItemLocalStorage = <T>(key: string, initialValue: T): T => {
   }
   return initialValue;
 };
+
+export function isDone(completed: boolean = false): {
+  text: 'done' | 'pending';
+  status: 'success' | 'warning';
+} {
+  return {
+    text: completed ? 'done' : 'pending',
+    status: `${completed ? 'success' : 'warning'}`,
+  };
+}
