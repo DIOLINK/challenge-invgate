@@ -1,9 +1,10 @@
 import { Layout } from '@/components';
+import { TodoList } from '@/components/TodoList';
 
 export const HomePage = () => {
   return (
     <Layout>
-      <div>TODO LIST</div>
+      <TodoList />
     </Layout>
   );
 };

@@ -28,7 +28,6 @@ export const ThemeProvider = ({ children }: PropsWithChildren) => {
   }, []);
 
   const toggleTheme = () => {
-    console.log('🚀 ~ toggleTheme ~ me llamo:');
     setTheme((oldTheme) => THEME.changeMode(oldTheme));
     document.body.setAttribute(THEME.dataTheme, THEME.changeMode(theme));
     setValue(THEME.changeMode(theme));
