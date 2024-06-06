@@ -11,8 +11,19 @@ body {
     color 0.3s ease;
   position: relative;
 }
+.pl-3 {
+  padding-left: 1rem;
+}
 .pointer {
   cursor: pointer;
+}
+.done {
+  text-decoration: line-through;
+  transition: text-decoration 0.3s ease;
+}
+.pending {
+  text-decoration: none;
+  transition: text-decoration 0.3s ease;
 }
 [data-bs-theme='dark'],
 [data-bs-theme='light'] {
