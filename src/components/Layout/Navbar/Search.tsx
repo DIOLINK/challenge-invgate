@@ -1,6 +1,8 @@
 import { AddItem } from '@/components';
+import { useUIContext } from '@/contexts/UI/UIProvider';
 import { Col, Form, Row } from 'react-bootstrap';
 export const Search = () => {
+  const { openModal } = useUIContext();
   return (
     <Col md={8}>
       <Form className="flex-grow-1">
@@ -21,7 +23,7 @@ export const Search = () => {
             />
           </Col>
           <AddItem variant="primary" btnTitle="Search" iconStart={null} />
-          <AddItem />
+          <AddItem onClick={openModal} />
         </Row>
       </Form>
     </Col>

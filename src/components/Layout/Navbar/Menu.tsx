@@ -1,4 +1,4 @@
-import { useTheme } from '@/contexts/ThemeContext';
+import { useTheme } from '@/contexts/UI/ThemeContext';
 import { IconBrightnessHalf } from '@tabler/icons-react';
 import { Button, Nav, Navbar, Offcanvas } from 'react-bootstrap';
 export const Menu = () => {
