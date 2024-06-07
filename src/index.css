@@ -11,6 +11,11 @@ body {
     color 0.3s ease;
   position: relative;
 }
+
+.res {
+  min-height: 88vmin;
+}
+
 .pl-3 {
   padding-left: 1rem;
 }

@@ -1,3 +1,5 @@
+import { Todo } from '@/types';
+
 export function randomTitle(): string {
   const title: string[] = [
     'La sombra del viento',
@@ -11,4 +13,17 @@ export function randomTitle(): string {
 
 export function randomBoolean(): boolean {
   return Math.random() >= 0.5;
+}
+
+export function removeTodoById(id: number, todoList: Todo[]) {
+  return todoList.filter((todo) => todo.id !== id);
+}
+
+export function editTodoById(id: number, todoList: Todo[], newTodo: Todo) {
+  return todoList.map((todo) => {
+    if (todo.id === id) {
+      return { ...todo, ...newTodo };
+    }
+    return todo;
+  });
 }
