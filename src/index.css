@@ -14,6 +14,9 @@ body {
 .pl-3 {
   padding-left: 1rem;
 }
+.g-2 {
+  gap: 1rem;
+}
 .pointer {
   cursor: pointer;
 }

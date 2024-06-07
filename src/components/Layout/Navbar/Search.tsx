@@ -1,5 +1,5 @@
-import { Button, Col, Form, Row } from 'react-bootstrap';
-
+import { AddItem } from '@/components';
+import { Col, Form, Row } from 'react-bootstrap';
 export const Search = () => {
   return (
     <Col md={8}>
@@ -20,9 +20,8 @@ export const Search = () => {
               className="d-flex align-items-center justify-content-around pointer"
             />
           </Col>
-          <Col xs="auto">
-            <Button type="submit">Search</Button>
-          </Col>
+          <AddItem variant="primary" btnTitle="Search" iconStart={null} />
+          <AddItem />
         </Row>
       </Form>
     </Col>

@@ -1,5 +1,4 @@
-import { Layout } from '@/components';
-import { TodoList } from '@/components/TodoList';
+import { Layout, TodoList } from '@/components';
 
 export const HomePage = () => {
   return (

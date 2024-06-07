@@ -1,8 +1,8 @@
 import { ROUTES } from '@/routers/routes';
+
 import { Container, Navbar } from 'react-bootstrap';
 import { Menu } from './Menu';
 import { Search } from './Search';
-
 function NavBar() {
   return (
     <Navbar sticky="top" expand="lg" className="bg-body-tertiary shadow mb-3">
