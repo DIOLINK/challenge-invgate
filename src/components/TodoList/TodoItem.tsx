@@ -7,7 +7,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
   return (
     <ListGroup.Item
       as="li"
-      className="d-flex justify-content-between align-items-center mt-1 border-1"
+      className={`d-flex justify-content-between align-items-center mt-1 border-1 ${todo.completed ? 'opacity-25' : 'opacity-100'} `}
     >
       <Row className="ms-2 me-auto">
         <Col className={`${isDone(todo.completed).text} fw-bold`}>
@@ -20,7 +20,7 @@ export const TodoItem = ({ todo }: { todo: Todo }) => {
       >
         {isDone(todo.completed).text}
       </Badge>
-      <MenuItem />
+      <MenuItem todoSelect={todo} />
     </ListGroup.Item>
   );
 };

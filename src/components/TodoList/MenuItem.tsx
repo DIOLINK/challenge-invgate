@@ -1,6 +1,9 @@
+import { Todo } from '@/types';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Button, Stack } from 'react-bootstrap';
-export const MENU_LIST = [
+
+export const MenuItem = ({ todoSelect }: { todoSelect: Todo }) => {
+  const MENU_LIST = [
   {
     name: 'edit',
     icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
@@ -16,7 +19,7 @@ export const MENU_LIST = [
     },
   },
 ];
-export const MenuItem = () => {
+
   return (
     <div className="pl-3">
       <Stack direction="horizontal">
@@ -25,7 +28,7 @@ export const MenuItem = () => {
             variant="link"
             title={menu.name.toUpperCase()}
             key={index}
-            onClick={menu.action}
+            onClick={() => menu.action(todoSelect)}
           >
             {menu.icon}
           </Button>
