@@ -1,3 +1,5 @@
+import { Todo } from '@/types';
+
 export const THEME = {
   dark: 'dark',
   light: 'light',
@@ -39,4 +41,46 @@ export function isDone(completed: boolean = false): {
     text: completed ? 'done' : 'pending',
     status: `${completed ? 'success' : 'warning'}`,
   };
+}
+
+export function removeTodoById(id: number, todoList: Todo[]) {
+  return todoList.filter((todo) => todo.id !== id);
+}
+
+export function editTodoById(id: number, todoList: Todo[], newTodo: Todo) {
+  return todoList.map((todo) => {
+    if (todo.id === id) {
+      return { ...todo, ...newTodo };
+    }
+    return todo;
+  });
+}
+
+export function hasIncompleteTodo(todoList: Todo[]) {
+  return todoList.some((todo) => todo.completed === false);
+}
+
+export function singleFilter(
+  todoList: Todo[] = [],
+  isComplete: boolean = false
+): Todo[] {
+  return todoList.filter((todo) => todo.completed === isComplete);
+}
+
+export function filterTodo(
+  value: string,
+  todoList: Todo[],
+  selectFilter: string = 'all'
+) {
+  const filtered: { [key: string]: Todo[] } = {
+    all: todoList,
+    done: singleFilter(todoList, true).filter((todo) =>
+      todo.title.toLowerCase().includes(value.toLowerCase())
+    ),
+    pending: singleFilter(todoList).filter((todo) =>
+      todo.title.toLowerCase().includes(value.toLowerCase())
+    ),
+  };
+
+  return filtered[selectFilter] as Todo[];
 }
