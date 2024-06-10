@@ -1,32 +1,25 @@
-import { useUIContext } from '@/contexts/UI/UIProvider';
-import { MODAL_TYPES } from '@/contexts/UI/constants';
-import { Todo } from '@/types';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Button, Stack } from 'react-bootstrap';
 
-export const MenuItem = ({ todoSelect }: { todoSelect: Todo }) => {
-  const { openModal, setTypeModel } = useUIContext();
-
+export const MenuItem = ({
+  handleDelete,
+  handleEdit,
+}: {
+  handleDelete: () => void;
+  handleEdit: () => void;
+}) => {
   const MENU_LIST = [
-  {
-    name: 'edit',
-    icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
-      action: (todo?: Todo) => {
-        setTypeModel({
-          type: MODAL_TYPES.ADD_NEW_TODO,
-          property: { todo },
-        });
-        openModal();
+    {
+      name: 'edit',
+      icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
+      action: handleEdit,
     },
-  },
-  {
-    name: 'delete',
-    icon: <IconTrash stroke={2} color={'var(--bs-danger)'} size={24} />,
-    action: function () {
-      console.log('first');
+    {
+      name: 'delete',
+      icon: <IconTrash stroke={2} color={'var(--bs-danger)'} size={24} />,
+      action: handleDelete,
     },
-  },
-];
+  ];
 
   return (
     <div className="pl-3">
@@ -36,7 +29,7 @@ export const MenuItem = ({ todoSelect }: { todoSelect: Todo }) => {
             variant="link"
             title={menu.name.toUpperCase()}
             key={index}
-            onClick={() => menu.action(todoSelect)}
+            onClick={() => menu.action()}
           >
             {menu.icon}
           </Button>

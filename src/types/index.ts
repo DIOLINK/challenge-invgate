@@ -6,3 +6,13 @@ export interface Todo {
 }
 
 export type TSeverity = 'success' | 'info' | 'warning' | 'error';
+
+export interface TSTypeModel {
+  type: string;
+  property: {};
+}
+
+export interface Filters {
+  search: string;
+  selectFilter: string;
+}

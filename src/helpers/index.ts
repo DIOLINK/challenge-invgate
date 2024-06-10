@@ -67,19 +67,21 @@ export function singleFilter(
   return todoList.filter((todo) => todo.completed === isComplete);
 }
 
+export function filterTodoBySearch(value: string, todoList: Todo[]): Todo[] {
+  return todoList.filter((todo) =>
+    todo.title.toLowerCase().includes(value.toLowerCase())
+  );
+}
+
 export function filterTodo(
   value: string,
   todoList: Todo[],
   selectFilter: string = 'all'
 ) {
   const filtered: { [key: string]: Todo[] } = {
-    all: todoList,
-    done: singleFilter(todoList, true).filter((todo) =>
-      todo.title.toLowerCase().includes(value.toLowerCase())
-    ),
-    pending: singleFilter(todoList).filter((todo) =>
-      todo.title.toLowerCase().includes(value.toLowerCase())
-    ),
+    all: filterTodoBySearch(value, todoList),
+    done: filterTodoBySearch(value, singleFilter(todoList, true)),
+    pending: filterTodoBySearch(value, singleFilter(todoList)),
   };
 
   return filtered[selectFilter] as Todo[];
