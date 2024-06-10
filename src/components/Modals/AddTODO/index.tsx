@@ -3,8 +3,8 @@ import { useLocalState } from '@/hooks/useLocalStorage';
 import { Todo } from '@/types';
 import { mockTodo } from '@/utils/mockup/todolist';
 import { Dispatch, useRef, useState } from 'react';
-import { Button } from 'react-bootstrap';
-import Modal from 'react-bootstrap/Modal';
+import { DualActionButton } from '../DualActionButton';
+import { TemplateModal } from '../TemplateModal';
 import { FormAddTODO } from './Form';
 
 interface AddTODOProps {
@@ -60,28 +60,25 @@ export function AddTODO({
   }
 
   return (
-    <Modal id="ADD-TODO" show={showModal} onHide={handleClose}>
-      <Modal.Header closeButton>
-        <Modal.Title>{todo?.id ? 'EDIT TODO' : 'NEW TODO'}</Modal.Title>
-      </Modal.Header>
-      <Modal.Body>
+    <TemplateModal
+      id="ADD_TODO"
+      title={todo?.id ? 'EDIT TODO' : 'NEW TODO'}
+      handleClose={handleClose}
+      showModal={showModal}
+      renderBody={() => (
         <FormAddTODO
           refInput={inputRef}
           errorMessage={errorMessage}
           title={todo?.title}
         />
-      </Modal.Body>
-      <Modal.Footer>
-        <Button variant="secondary" onClick={handleClose}>
-          Close
-        </Button>
-        <Button
-          variant="primary"
-          onClick={todo?.id ? handleEdit : handleCreate}
-        >
-          {todo?.id ? 'Edit' : 'Create'}
-        </Button>
-      </Modal.Footer>
-    </Modal>
+      )}
+      renderFooter={() => (
+        <DualActionButton
+          onCancel={handleClose}
+          onAction={todo?.id ? handleEdit : handleCreate}
+          actionLabel={todo?.id ? 'Edit' : 'Create'}
+        />
+      )}
+    />
   );
 }

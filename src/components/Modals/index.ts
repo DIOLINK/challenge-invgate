@@ -1,3 +1,4 @@
 import { AddTODO } from './AddTODO';
+import { ConfirmModal } from './Confirm';
 
-export { AddTODO };
+export { AddTODO, ConfirmModal };
