@@ -5,7 +5,7 @@ import {
   useContext,
   useState,
 } from 'react';
-import { MODAL_COMPONENTS } from './constants';
+import { MODAL_COMPONENTS, MODAL_TYPES } from './constants';
 
 interface UIProviderProps {}
 
@@ -16,23 +16,36 @@ export interface UIState {
   backdropLoader: boolean;
 }
 
+interface TSTypeModel {
+  type: string;
+  property: {};
+}
+
+const INIT_MODAL = {
+  type: MODAL_TYPES.ADD_NEW_TODO,
+  property: {},
+};
+
 export const UIProvider = ({
   children,
 }: PropsWithChildren<UIProviderProps>) => {
   const [showModal, setShowModal] = useState(false);
-  const [typeModal, setTypeModel] = useState('ADD_NEW_TODO');
+  const [typeModal, setTypeModel] = useState<TSTypeModel>(INIT_MODAL);
   const openModal = () => {
     setShowModal(true);
   };
 
   const renderModal = (): JSX.Element | null => {
-    const ModalComponent = MODAL_COMPONENTS[typeModal];
+    const ModalComponent = MODAL_COMPONENTS[typeModal?.type];
     if (!ModalComponent) return null;
 
     return (
       <ModalComponent
         showModal={showModal}
-        handleClose={() => setShowModal(false)}
+        handleClose={() => {
+          setShowModal(false), setTypeModel(INIT_MODAL);
+        }}
+        {...typeModal?.property}
       />
     );
   };
@@ -51,7 +64,7 @@ export const UIProvider = ({
 };
 
 interface UIContextProps {
-  setTypeModel: Dispatch<React.SetStateAction<string>>;
+  setTypeModel: Dispatch<React.SetStateAction<TSTypeModel>>;
   openModal: () => void;
 }
 

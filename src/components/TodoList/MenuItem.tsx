@@ -1,14 +1,22 @@
+import { useUIContext } from '@/contexts/UI/UIProvider';
+import { MODAL_TYPES } from '@/contexts/UI/constants';
 import { Todo } from '@/types';
 import { IconEdit, IconTrash } from '@tabler/icons-react';
 import { Button, Stack } from 'react-bootstrap';
 
 export const MenuItem = ({ todoSelect }: { todoSelect: Todo }) => {
+  const { openModal, setTypeModel } = useUIContext();
+
   const MENU_LIST = [
   {
     name: 'edit',
     icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
-    action: function () {
-      console.log('first');
+      action: (todo?: Todo) => {
+        setTypeModel({
+          type: MODAL_TYPES.ADD_NEW_TODO,
+          property: { todo },
+        });
+        openModal();
     },
   },
   {
