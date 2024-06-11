@@ -1,11 +1,9 @@
-import { Modal } from 'react-bootstrap';
+import { Modal, ModalProps } from 'react-bootstrap';
 import { DualActionButton } from './DualActionButton';
 
-interface TemplateModalProps {
+interface TemplateModalProps extends ModalProps {
   title: string;
-  showModal: boolean;
   message?: string;
-  handleClose: () => void;
   renderBody?: () => JSX.Element;
   renderFooter?: () => JSX.Element;
   id?: string;

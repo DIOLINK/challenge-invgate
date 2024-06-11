@@ -1,3 +1,5 @@
+import { ModalProps } from 'react-bootstrap';
+
 export interface Todo {
   userId: number;
   id: number;
@@ -15,4 +17,14 @@ export interface TSTypeModel {
 export interface Filters {
   search: string;
   selectFilter: string;
+}
+
+export interface ACTIONS_TYPES {
+  SHOW_MODAL: 'SHOW_MODAL';
+  HIDE_MODAL: 'HIDE_MODAL';
+}
+
+export interface UIState {
+  modalType: string;
+  modalProps?: ModalProps;
 }

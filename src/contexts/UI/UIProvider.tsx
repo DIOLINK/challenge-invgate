@@ -1,57 +1,49 @@
-import { TSTypeModel } from '@/types';
+import { UIState } from '@/types';
 import {
-  Dispatch,
   PropsWithChildren,
   createContext,
   useContext,
-  useState,
+  useReducer,
 } from 'react';
-import { MODAL_COMPONENTS, MODAL_TYPES } from './constants';
+import { ACTIONS_TYPE, MODAL_COMPONENTS, UI_INITIAL_STATE } from './constants';
+import { uiReducer } from './uiReducer';
 
 interface UIProviderProps {}
-
-export interface UIState {
-  modalType: string;
-  modalProps?: any;
-  snackbarProps?: any;
-  backdropLoader: boolean;
-}
-
-const INIT_MODAL = {
-  type: MODAL_TYPES.ADD_NEW_TODO,
-  property: {},
-};
 
 export const UIProvider = ({
   children,
 }: PropsWithChildren<UIProviderProps>) => {
-  const [showModal, setShowModal] = useState(false);
-  const [typeModal, setTypeModel] = useState<TSTypeModel>(INIT_MODAL);
+  const [state, dispatch] = useReducer(uiReducer, UI_INITIAL_STATE);
 
-  const openModal = () => {
-    setShowModal(true);
-  };
+  function hideModal() {
+    dispatch({
+      type: ACTIONS_TYPE.HIDE_MODAL,
+      payload: {
+        modalType: '',
+      },
+    });
+  }
+
+  function showModal(modalType: string, modalProps?: any) {
+    dispatch({
+      type: ACTIONS_TYPE.SHOW_MODAL,
+      payload: { modalType, modalProps },
+    });
+  }
 
   const renderModal = (): JSX.Element | null => {
-    const ModalComponent = MODAL_COMPONENTS[typeModal?.type];
-    if (!ModalComponent) return null;
+    const ModalComponent = MODAL_COMPONENTS[state.modalType];
+    if (!state.modalType || !ModalComponent) return null;
 
-    return (
-      <ModalComponent
-        showModal={showModal}
-        handleClose={() => {
-          setShowModal(false), setTypeModel(INIT_MODAL);
-        }}
-        {...typeModal?.property}
-      />
-    );
+    return <ModalComponent {...state.modalProps} />;
   };
 
   return (
     <UIContext.Provider
       value={{
-        setTypeModel,
-        openModal,
+        ...state,
+        hideModal,
+        showModal,
       }}
     >
       {renderModal()}
@@ -60,15 +52,12 @@ export const UIProvider = ({
   );
 };
 
-interface UIContextProps {
-  setTypeModel: Dispatch<React.SetStateAction<TSTypeModel>>;
-  openModal: () => void;
+interface UIContextProps extends UIState {
+  hideModal: () => void;
+  showModal: (modalType: string, modalProps?: any) => void;
 }
 
-export const UIContext = createContext<UIContextProps>({
-  setTypeModel: () => {},
-  openModal: () => {},
-});
+export const UIContext = createContext<UIContextProps>({} as UIContextProps);
 
 export const useUIContext = () => {
   return useContext(UIContext);

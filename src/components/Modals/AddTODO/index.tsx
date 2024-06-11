@@ -1,22 +1,19 @@
 import { useTODO } from '@/contexts/TODOContext';
+import { useUIContext } from '@/contexts/UI/UIProvider';
 import { Todo } from '@/types';
 import { mockTodo } from '@/utils/mockup/todolist';
 import { useRef, useState } from 'react';
+import { ModalProps } from 'react-bootstrap';
 import { DualActionButton } from '../DualActionButton';
 import { TemplateModal } from '../TemplateModal';
 import { FormAddTODO } from './Form';
 
-export interface AddTODOProps {
-  showModal: boolean;
-  handleClose: () => void;
+export interface AddTODOProps extends ModalProps {
   todo?: Todo;
 }
 
-export function AddTODO({
-  showModal = false,
-  handleClose,
-  todo,
-}: AddTODOProps) {
+export function AddTODO({ todo, ...props }: AddTODOProps) {
+  const { hideModal } = useUIContext();
   const [errorMessage, setErrorMessage] = useState<undefined | string>(
     undefined
   );
@@ -30,7 +27,7 @@ export function AddTODO({
     }
     const mockT = mockTodo();
     addTodo({ ...mockT, title: inputRef.current?.value, completed: false });
-    handleClose();
+    hideModal();
   }
   function handleEdit() {
     setErrorMessage(undefined);
@@ -46,15 +43,15 @@ export function AddTODO({
       completed: false,
       id: todo!.id,
     });
-    handleClose();
+    hideModal();
   }
 
   return (
     <TemplateModal
       id="ADD_TODO"
+      {...props}
       title={todo?.id ? 'EDIT TODO' : 'NEW TODO'}
-      handleClose={handleClose}
-      showModal={showModal}
+      handleClose={hideModal}
       renderBody={() => (
         <FormAddTODO
           refInput={inputRef}
@@ -64,7 +61,7 @@ export function AddTODO({
       )}
       renderFooter={() => (
         <DualActionButton
-          onCancel={handleClose}
+          onCancel={hideModal}
           onAction={todo?.id ? handleEdit : handleCreate}
           actionLabel={todo?.id ? 'Edit' : 'Create'}
         />

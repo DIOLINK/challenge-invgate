@@ -7,32 +7,24 @@ import { Button, Stack } from 'react-bootstrap';
 
 export const MenuItem = ({ todoSelect }: { todoSelect: Todo }) => {
   const { deleteTodo } = useTODO();
-  const { openModal, setTypeModel } = useUIContext();
+  const { showModal } = useUIContext();
 
   const MENU_LIST = [
     {
       name: 'edit',
       icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
       action: (todo?: Todo) => {
-        setTypeModel({
-          type: MODAL_TYPES.ADD_NEW_TODO,
-          property: { todo },
-        });
-        openModal();
+        showModal(MODAL_TYPES.ADD_NEW_TODO, { todo });
       },
     },
     {
       name: 'delete',
       icon: <IconTrash stroke={2} color={'var(--bs-danger)'} size={24} />,
       action: (todo?: Todo) => {
-        setTypeModel({
-          type: MODAL_TYPES.CONFIRMATION_MODAL,
-          property: {
-            message: 'Are you sure you want to delete this todo?',
-            callback: () => deleteTodo(todo),
-          },
+        showModal(MODAL_TYPES.CONFIRMATION_MODAL, {
+          message: 'Are you sure you want to delete this todo?',
+          callback: () => deleteTodo(todo),
         });
-        openModal();
       },
     },
   ];

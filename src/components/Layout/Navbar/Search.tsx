@@ -1,11 +1,12 @@
 import { AddItem } from '@/components';
 import { useTODO } from '@/contexts/TODOContext';
 import { useUIContext } from '@/contexts/UI/UIProvider';
+import { MODAL_TYPES } from '@/contexts/UI/constants';
 import { ChangeEvent } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
 export const Search = () => {
   const { setFilter } = useTODO();
-  const { openModal } = useUIContext();
+  const { showModal } = useUIContext();
 
   const OPTIONS_SELECTED = [
     { value: 'all', label: 'All Todo' },
@@ -53,7 +54,7 @@ export const Search = () => {
               ))}
             </Form.Select>
           </Col>
-          <AddItem onClick={openModal} />
+          <AddItem onClick={() => showModal(MODAL_TYPES.ADD_NEW_TODO)} />
         </Row>
       </Form>
     </Col>

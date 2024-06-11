@@ -1,3 +1,4 @@
+import { useUIContext } from '@/contexts/UI/UIProvider';
 import { AddTODOProps } from '../AddTODO';
 import { DualActionButton } from '../DualActionButton';
 import { TemplateModal } from '../TemplateModal';
@@ -8,21 +9,21 @@ interface ConfirmModalProps extends Omit<AddTODOProps, 'todo'> {
 export const ConfirmModal = ({
   callback = () => {},
   message,
-  handleClose,
   showModal,
 }: ConfirmModalProps) => {
+  const { hideModal } = useUIContext();
   return (
     <TemplateModal
       title="Confirm"
       message={message}
       showModal={showModal}
-      handleClose={handleClose}
+      handleClose={hideModal}
       renderFooter={() => (
         <DualActionButton
-          onCancel={handleClose}
+          onCancel={hideModal}
           onAction={() => {
             callback();
-            handleClose();
+            hideModal();
           }}
           actionLabel={'Confirm delete'}
         />

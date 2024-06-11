@@ -22,3 +22,8 @@ export const SNACKBAR_SEVERITY: { [key: string]: TSeverity } = {
   WARNING: 'warning',
   INFO: 'info',
 };
+
+export const ACTIONS_TYPE = {
+  SHOW_MODAL: 'SHOW_MODAL',
+  HIDE_MODAL: 'HIDE_MODAL',
+};
