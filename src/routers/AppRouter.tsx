@@ -1,3 +1,4 @@
+import { TodoListPage } from '@/views/TodoList';
 import { HomePage } from '@/views/index';
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom';
 import { ROUTES } from './routes';
@@ -7,6 +8,7 @@ export const AppRouter = () => {
     <BrowserRouter>
       <Routes>
         <Route path={ROUTES.home} element={<HomePage />} />
+        <Route path={ROUTES.list} element={<TodoListPage />} />
         <Route path={ROUTES.other} element={<Navigate to={ROUTES.home} />} />
       </Routes>
     </BrowserRouter>
