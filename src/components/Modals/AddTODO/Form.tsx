@@ -5,17 +5,21 @@ export const FormAddTODO = ({
   refInput,
   errorMessage,
   title,
+  label,
+  placeholder,
 }: {
   refInput: RefObject<HTMLInputElement>;
   errorMessage?: string;
   title?: string;
+  label: string;
+  placeholder: string;
 }) => {
   return (
     <Form.Group controlId="id">
-      <Form.Label>Todo:</Form.Label>
+      <Form.Label>{label}</Form.Label>
       <Form.Control
         type="text"
-        placeholder="Add to do"
+        placeholder={placeholder}
         required
         isInvalid={!!errorMessage}
         ref={refInput}
@@ -25,7 +29,7 @@ export const FormAddTODO = ({
       </Form.Control.Feedback>
       {title && (
         <Form.Text id="old-title">
-          <p className="py-2">OLD TODO: {title}</p>
+          <p className="py-2">{title}</p>
         </Form.Text>
       )}
     </Form.Group>

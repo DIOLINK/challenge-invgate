@@ -7,6 +7,10 @@ export interface Todo {
   completed: boolean;
 }
 
+export interface CollectionTodo extends Omit<Todo, 'userId' | 'completed'> {
+  todos: Todo[];
+}
+
 export type TSeverity = 'success' | 'info' | 'warning' | 'error';
 
 export interface TSTypeModel {

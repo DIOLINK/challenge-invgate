@@ -1,4 +1,4 @@
-import { Todo } from '@/types';
+import { CollectionTodo, Todo } from '@/types';
 import { randomBoolean, randomTitle } from '../common';
 
 export function mockTodo() {
@@ -7,6 +7,13 @@ export function mockTodo() {
     title: randomTitle(),
     completed: randomBoolean(),
     userId: 0,
+  };
+}
+export function mockCollectionTodo(): CollectionTodo {
+  return {
+    id: Date.now(),
+    title: randomTitle(),
+    todos: mockTodoList(),
   };
 }
 

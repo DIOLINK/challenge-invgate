@@ -1,11 +1,12 @@
 import {
+  editCollectionById,
   editTodoById,
   filterTodo,
   hasIncompleteTodo,
   removeTodoById,
 } from '@/helpers';
 import { useLocalState } from '@/hooks/useLocalStorage';
-import { Todo } from '@/types';
+import { CollectionTodo, Todo } from '@/types';
 
 import {
   Dispatch,
@@ -17,23 +18,22 @@ import {
 } from 'react';
 
 type TsFunction = (todo?: Todo) => void;
+type CsFunction = (collection?: CollectionTodo) => void;
 interface TODOContextProps {
-  todoList: Todo[];
-  isPending: boolean;
+  addCollectionTodo: CsFunction;
   addTodo: TsFunction;
+  collectionsTodo: CollectionTodo[];
+  deleteCollection: CsFunction;
   deleteTodo: TsFunction;
+  editCollection: CsFunction;
   editTodo: TsFunction;
+  isPending: boolean;
   setFilter: Dispatch<React.SetStateAction<TSFilter>>;
+  setCollection: Dispatch<React.SetStateAction<CollectionTodo | null>>;
+  todoList: Todo[];
 }
 
-const TODOContext = createContext<TODOContextProps>({
-  todoList: [],
-  isPending: false,
-  addTodo: () => {},
-  deleteTodo: () => {},
-  editTodo: () => {},
-  setFilter: () => {},
-});
+const TODOContext = createContext<TODOContextProps>({} as TODOContextProps);
 
 export interface TSFilter {
   search: string;
@@ -44,34 +44,83 @@ export const TODOContextProvider = ({ children }: PropsWithChildren) => {
     search: '',
     selectFilter: 'all',
   });
-  const [value, setValue] = useLocalState<Todo[]>('todoList', []);
-  const [todoList, setTodoList] = useState<Todo[]>(value);
+
+  const [valueCollectionTodo, setValueCollectionTodo] = useLocalState<
+    CollectionTodo[]
+  >('collectionTodo', []);
+
+  const [collectionTodo, setCollectionTodo] =
+    useState<CollectionTodo[]>(valueCollectionTodo);
+
+  const [collection, setCollection] = useState<CollectionTodo | null>(null);
+
+  const [todoList, setTodoList] = useState<Todo[]>([]);
 
   useEffect(() => {
-    setValue(todoList);
+    if (!collection?.todos) return;
+    setTodoList(collection?.todos);
+  }, [collection]);
+
+  useEffect(() => {
+    if (!collection) return;
+    editCollection({ ...collection, todos: todoList });
   }, [todoList]);
+
+  useEffect(() => {
+    setValueCollectionTodo(collectionTodo);
+  }, [collectionTodo]);
 
   function addTodo(todo?: Todo) {
     if (!!todo) setTodoList([...todoList, { ...todo }]);
   }
 
+  function addCollectionTodo(collection?: CollectionTodo) {
+    if (!!collection) setCollectionTodo([...collectionTodo, { ...collection }]);
+  }
+
   function deleteTodo(todo?: Todo) {
-    if (!!todo) setTodoList(() => removeTodoById(todo.id, todoList));
+    if (!!todo) setTodoList(() => removeTodoById(todo.id, todoList) as Todo[]);
+  }
+
+  function deleteCollection(collection?: CollectionTodo) {
+    if (!!collection)
+      setCollectionTodo(
+        () => removeTodoById(collection.id, collectionTodo) as CollectionTodo[]
+      );
   }
 
   function editTodo(todo?: Todo) {
     if (!!todo) setTodoList(() => editTodoById(todo.id, todoList, todo));
   }
 
+  function editCollection(collection?: CollectionTodo) {
+    if (!!collection)
+      setCollectionTodo(() =>
+        editCollectionById(collection.id, collectionTodo, collection)
+      );
+  }
+
   return (
     <TODOContext.Provider
       value={{
-        todoList: filterTodo(filter.search, todoList, filter.selectFilter),
+        collectionsTodo: filterTodo(
+          filter.search,
+          collectionTodo
+        ) as CollectionTodo[],
+        todoList: filterTodo(
+          filter.search,
+          todoList,
+          filter.selectFilter
+        ) as Todo[],
         isPending: hasIncompleteTodo(todoList),
+        addCollectionTodo,
         addTodo,
+        deleteCollection,
         deleteTodo,
+        editCollection,
         editTodo,
         setFilter,
+        setCollection,
       }}
     >
       {children}

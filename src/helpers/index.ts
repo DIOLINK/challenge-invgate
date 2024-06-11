@@ -1,4 +1,5 @@
-import { Todo } from '@/types';
+import { CollectionTodo, Todo } from '@/types';
+import { Location } from 'react-router-dom';
 
 export const THEME = {
   dark: 'dark',
@@ -43,8 +44,17 @@ export function isDone(completed: boolean = false): {
   };
 }
 
-export function removeTodoById(id: number, todoList: Todo[]) {
+export function removeTodoById(
+  id: number,
+  todoList: Todo[] | CollectionTodo[]
+) {
   return todoList.filter((todo) => todo.id !== id);
+}
+export function getElementListById(
+  id: number,
+  list: Todo[] | CollectionTodo[]
+) {
+  return list.filter((todo) => todo.id === id);
 }
 
 export function editTodoById(id: number, todoList: Todo[], newTodo: Todo) {
@@ -53,6 +63,18 @@ export function editTodoById(id: number, todoList: Todo[], newTodo: Todo) {
       return { ...todo, ...newTodo };
     }
     return todo;
+  });
+}
+export function editCollectionById(
+  id: number,
+  list: CollectionTodo[],
+  newCollection: CollectionTodo
+) {
+  return list.map((collection) => {
+    if (collection.id === id) {
+      return { ...collection, ...newCollection };
+    }
+    return collection;
   });
 }
 
@@ -68,9 +90,9 @@ export function filterTodosByCompleted(
 }
 
 export function filterTodosByTitle(
-  todoList: Todo[] = [],
+  todoList: (Todo | CollectionTodo)[] = [],
   value: string
-): Todo[] {
+) {
   return todoList.filter((todo) =>
     todo.title.toLowerCase().includes(value.toLowerCase())
   );
@@ -78,14 +100,28 @@ export function filterTodosByTitle(
 
 export function filterTodo(
   value: string,
-  todoList: Todo[],
+  todoList: (Todo | CollectionTodo)[],
   selectFilter: string = 'all'
 ) {
-  const filtered: { [key: string]: Todo[] } = {
+  const filtered: { [key: string]: (Todo | CollectionTodo)[] } = {
     all: filterTodosByTitle(todoList, value),
-    done: filterTodosByTitle(filterTodosByCompleted(todoList, true), value),
-    pending: filterTodosByTitle(filterTodosByCompleted(todoList), value),
+    done: filterTodosByTitle(
+      filterTodosByCompleted(todoList as Todo[], true) as Todo[],
+      value
+    ),
+    pending: filterTodosByTitle(
+      filterTodosByCompleted(todoList as Todo[]),
+      value
+    ),
   };
 
-  return filtered[selectFilter] as Todo[];
+  return filtered[selectFilter] as (Todo | CollectionTodo)[];
+}
+
+export function analyticLocation(location: Location) {
+  const idLocation = location.pathname.replace('/', '');
+  return {
+    id: +idLocation,
+    isHome: idLocation.length === 0,
+  };
 }
