@@ -1,32 +1,27 @@
-import { editTodoById } from '@/helpers';
-import { useLocalState } from '@/hooks/useLocalStorage';
+import { useTODO } from '@/contexts/TODOContext';
 import { Todo } from '@/types';
 import { mockTodo } from '@/utils/mockup/todolist';
-import { Dispatch, useRef, useState } from 'react';
+import { useRef, useState } from 'react';
 import { DualActionButton } from '../DualActionButton';
 import { TemplateModal } from '../TemplateModal';
 import { FormAddTODO } from './Form';
 
-interface AddTODOProps {
+export interface AddTODOProps {
   showModal: boolean;
   handleClose: () => void;
   todo?: Todo;
-  setTodoList: Dispatch<React.SetStateAction<Todo[]>>;
 }
 
 export function AddTODO({
   showModal = false,
   handleClose,
   todo,
-  setTodoList,
 }: AddTODOProps) {
   const [errorMessage, setErrorMessage] = useState<undefined | string>(
     undefined
   );
-  const [todoList, setValue] = useLocalState<Todo[]>('todoList', []);
-
   const inputRef = useRef<HTMLInputElement | null>(null);
-
+  const { addTodo, editTodo } = useTODO();
   function handleCreate() {
     setErrorMessage(undefined);
     if (!inputRef.current?.value) {
@@ -34,14 +29,7 @@ export function AddTODO({
       return;
     }
     const mockT = mockTodo();
-    const newTodo = {
-      ...mockT,
-      title: inputRef.current.value,
-      completed: false,
-    };
-
-    setValue([...todoList, { ...newTodo }]);
-    setTodoList([...todoList, { ...newTodo }]);
+    addTodo({ ...mockT, title: inputRef.current?.value, completed: false });
     handleClose();
   }
   function handleEdit() {
@@ -50,12 +38,14 @@ export function AddTODO({
       setErrorMessage('Required');
       return;
     }
-    const newTodoList = editTodoById(todo?.id!, todoList, {
-      ...todo!,
-      title: inputRef.current.value,
+    const mockT = mockTodo();
+    editTodo({
+      ...todo,
+      ...mockT,
+      title: inputRef.current?.value,
+      completed: false,
+      id: todo!.id,
     });
-    setValue(newTodoList);
-    setTodoList(newTodoList);
     handleClose();
   }
 

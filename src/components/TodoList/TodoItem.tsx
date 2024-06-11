@@ -1,19 +1,11 @@
+import { useTODO } from '@/contexts/TODOContext';
 import { isDone } from '@/helpers';
 import { Todo } from '@/types';
 import { Badge, Col, ListGroup, Row } from 'react-bootstrap';
 import { MenuItem } from './MenuItem';
 
-export const TodoItem = ({
-  todo,
-  onEdit,
-  onDelete,
-  onStatus,
-}: {
-  todo: Todo;
-  onEdit: (todo: Todo) => void;
-  onDelete: (todo: Todo) => void;
-  onStatus: (todo: Todo) => void;
-}) => {
+export const TodoItem = ({ todo }: { todo: Todo }) => {
+  const { editTodo } = useTODO();
   return (
     <ListGroup.Item
       as="li"
@@ -25,16 +17,13 @@ export const TodoItem = ({
         </Col>
       </Row>
       <Badge
+        onClick={() => editTodo({ ...todo, completed: !todo.completed })}
         bg={isDone(todo.completed).status}
         className="text-uppercase text-dark pointer"
-        onClick={() => onStatus(todo)}
       >
         {isDone(todo.completed).text}
       </Badge>
-      <MenuItem
-        handleEdit={() => onEdit(todo)}
-        handleDelete={() => onDelete(todo)}
-      />
+      <MenuItem todoSelect={todo} />
     </ListGroup.Item>
   );
 };

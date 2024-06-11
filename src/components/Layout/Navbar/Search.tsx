@@ -1,13 +1,12 @@
 import { AddItem } from '@/components';
+import { useTODO } from '@/contexts/TODOContext';
+import { useUIContext } from '@/contexts/UI/UIProvider';
 import { ChangeEvent } from 'react';
 import { Col, Form, Row } from 'react-bootstrap';
-import { LayoutProps } from '..';
-interface SearchProps extends LayoutProps {}
-export const Search = ({
-  setShowModal,
-  setTodoFilters,
-  todoFilter,
-}: SearchProps) => {
+export const Search = () => {
+  const { setFilter } = useTODO();
+  const { openModal } = useUIContext();
+
   const OPTIONS_SELECTED = [
     { value: 'all', label: 'All Todo' },
     { value: 'done', label: 'Done' },
@@ -17,10 +16,10 @@ export const Search = ({
   function handleChange(
     event: ChangeEvent<HTMLInputElement | HTMLSelectElement>
   ): void {
-    setTodoFilters({
-      ...todoFilter,
+    setFilter((oldFilter) => ({
+      ...oldFilter,
       [event.target.name]: event.target.value,
-    });
+    }));
   }
 
   return (
@@ -54,7 +53,7 @@ export const Search = ({
               ))}
             </Form.Select>
           </Col>
-          <AddItem onClick={() => setShowModal(true)} />
+          <AddItem onClick={openModal} />
         </Row>
       </Form>
     </Col>
