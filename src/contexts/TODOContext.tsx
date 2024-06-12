@@ -1,8 +1,11 @@
+import { getAllTodos } from '@/data/getterTodos';
 import {
   editCollectionById,
   editTodoById,
   filterTodo,
+  getElementListById,
   hasIncompleteTodo,
+  isEmpty,
   removeTodoById,
 } from '@/helpers';
 import { useLocalState } from '@/hooks/useLocalStorage';
@@ -27,9 +30,10 @@ interface TODOContextProps {
   deleteTodo: TsFunction;
   editCollection: CsFunction;
   editTodo: TsFunction;
+  isLoading: boolean;
   isPending: boolean;
-  setFilter: Dispatch<React.SetStateAction<TSFilter>>;
   setCollection: Dispatch<React.SetStateAction<CollectionTodo | null>>;
+  setFilter: Dispatch<React.SetStateAction<TSFilter>>;
   todoList: Todo[];
 }
 
@@ -40,6 +44,7 @@ export interface TSFilter {
   selectFilter: string;
 }
 export const TODOContextProvider = ({ children }: PropsWithChildren) => {
+  const [isLoading, setIsLoading] = useState(true);
   const [filter, setFilter] = useState<TSFilter>({
     search: '',
     selectFilter: 'all',
@@ -57,6 +62,20 @@ export const TODOContextProvider = ({ children }: PropsWithChildren) => {
   const [todoList, setTodoList] = useState<Todo[]>([]);
 
   useEffect(() => {
+    if (!isEmpty(getElementListById(0, collectionTodo) as [])) return;
+    getAllTodos()
+      .then((data) => {
+        addCollectionTodo({ id: 0, title: 'Example with API', todos: data });
+        setIsLoading(false);
+      })
+      .catch((error) => {
+        alert(`Error get all TODOS: ${error.message}`);
+        console.error(error);
+        setIsLoading(false);
+      });
+  }, []);
+
+  useEffect(() => {
     if (!collection?.todos) return;
     setTodoList(collection?.todos);
   }, [collection]);
@@ -68,6 +87,7 @@ export const TODOContextProvider = ({ children }: PropsWithChildren) => {
 
   useEffect(() => {
     setValueCollectionTodo(collectionTodo);
+    setIsLoading(false);
   }, [collectionTodo]);
 
   function addTodo(todo?: Todo) {
@@ -103,6 +123,7 @@ export const TODOContextProvider = ({ children }: PropsWithChildren) => {
   return (
     <TODOContext.Provider
       value={{
+        isLoading,
         collectionsTodo: filterTodo(
           filter.search,
           collectionTodo

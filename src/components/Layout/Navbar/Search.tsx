@@ -62,7 +62,12 @@ export const Search = () => {
           )}
           <AddItem
             btnTitle={isHome ? 'New List TODO' : 'New TODO'}
-            onClick={() => showModal(MODAL_TYPES.ADD_NEW_TODO, { location })}
+            onClick={() =>
+              showModal(MODAL_TYPES.ADD_NEW_TODO, {
+                location,
+                isEditing: false,
+              })
+            }
           />
         </Row>
       </div>

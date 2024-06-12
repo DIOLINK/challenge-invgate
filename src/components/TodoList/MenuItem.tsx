@@ -16,7 +16,12 @@ export const MenuItem = ({ todo: todoSelect, collection }: MenuItemProps) => {
       name: 'edit',
       icon: <IconEdit stroke={2} color={'var(--bs-info)'} size={24} />,
       action: (todo?: Todo) => {
-        showModal(MODAL_TYPES.ADD_NEW_TODO, { todo, collection, location });
+        showModal(MODAL_TYPES.ADD_NEW_TODO, {
+          todo,
+          collection,
+          location,
+          isEditing: true,
+        });
       },
     },
     {

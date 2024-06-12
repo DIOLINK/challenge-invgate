@@ -14,12 +14,14 @@ export interface AddTODOProps extends ModalProps {
   todo?: Todo;
   location?: Location;
   collection?: CollectionTodo;
+  isEditing?: boolean;
 }
 
 export function AddTODO({
   todo,
   location,
   collection,
+  isEditing = false,
   ...props
 }: AddTODOProps) {
   const { isHome } = analyticLocation(location!);
@@ -96,8 +98,8 @@ export function AddTODO({
       renderFooter={() => (
         <DualActionButton
           onCancel={hideModal}
-          onAction={todo?.id || collection?.id ? handleEdit : handleCreate}
-          actionLabel={todo?.id || collection?.id ? 'Edit' : 'Create'}
+          onAction={isEditing ? handleEdit : handleCreate}
+          actionLabel={isEditing ? 'Edit' : 'Create'}
         />
       )}
     />
